@@ -13,7 +13,7 @@
 class Line {
 public:
 	struct Coords {
-		int a1{}, b1{}, a2{}, b2{};
+		int x1{}, y1{}, x2{}, y2{};
 	};
 
 	Line(Coords location, SDL_Color _color) {
@@ -25,7 +25,7 @@ public:
 			throw std::runtime_error("Line::draw renderer is NULL!");
 		}
 		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-		SDL_RenderDrawLine(renderer,coords.a1,coords.b1,coords.a2,coords.b2);
+		SDL_RenderDrawLine(renderer, coords.x1, coords.y1, coords.x2, coords.y2);
 	}
 
 private:
