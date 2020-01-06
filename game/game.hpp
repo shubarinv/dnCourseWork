@@ -10,11 +10,9 @@
 #include <iostream>
 #include <stdexcept>
 #include "UI/ui_manager.hpp"
-#include "game_field.hpp"
 #include "UI/ui_main_menu.hpp"
 #include "input_manager.hpp"
-#include "UI/ui_edit_game_field.hpp"
-
+using namespace std;
 class Game {
 private:
     SDL_DisplayMode DM{};
@@ -53,8 +51,6 @@ public:
 
         uiManager = new UI_Manager(SDL_GetWindowSurface(win), ren, win,
                                    nullptr); //init UI_Manager and font related stuff
-        gameField = new GameField(win, ren);
-        gameField->checkForNeighbors();
         inputManager = new InputManager();
         uiManager = new UI_Manager(SDL_GetWindowSurface(win), ren, win,
                                    inputManager); //init UI_Manager and font related stuff

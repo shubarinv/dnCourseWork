@@ -35,7 +35,7 @@ protected:
     std::string locale{};
     UI_Manager *uiManager{};
     SDL_Window *win{};
-    map <string, string> menuStrings;
+    std::map <string, string> menuStrings;
 };
 
 
