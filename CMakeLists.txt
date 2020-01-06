@@ -27,7 +27,7 @@ link_libraries(
 )
 set(CMAKE_CXX_STANDARD 17)
 #add_executable(progOnHLang ex1main.cpp)
-add_executable(dnCourseWork driver.cpp game/game.hpp game/UI/ui_base.hpp game/UI/ui_manager.hpp game/UI/ui_main_menu.hpp game/UI/ui_button.hpp game/input_manager.hpp game/windows_manager.hpp)
+add_executable(dnCourseWork driver.cpp game/game.hpp game/UI/ui_base.hpp game/UI/ui_manager.hpp game/UI/ui_main_menu.hpp game/UI/ui_button.hpp game/input_manager.hpp game/windows_manager.hpp game/line.hpp)
 include_directories(${SDL2_INCLUDE_DIR}
         ${SDL2_IMAGE_INCLUDE_DIR}
         ${SDL2_MIXER_INCLUDE_DIR}
