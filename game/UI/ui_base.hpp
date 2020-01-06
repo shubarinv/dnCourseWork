@@ -12,7 +12,7 @@
 #include <SDL_rect.h>
 #include <SDL_surface.h>
 #include "ui_manager.hpp"
-
+using namespace std;
 class UI_Base {
 public:
     UI_Base(UI_Manager *ui_Manager, SDL_Window *window, std::string _locale = "en") {

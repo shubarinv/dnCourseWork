@@ -18,7 +18,6 @@ private:
     SDL_DisplayMode DM{};
     SDL_Window *win{};
     SDL_Renderer *ren{};
-    GameField *gameField{};
     InputManager *inputManager{};
     UI_Manager *uiManager;
     char state = 'm';///< r-playing game| p-pause| m-main_Menu| e-Editing field
@@ -68,17 +67,8 @@ private:
         int frameDelay = 2;
         bool showDialog = true;
         UI_MainMenu uiMainMenu(uiManager, win, "ru");
-        uiEditGameField uiEditGameField(uiManager, win, "ru", gameField);
 
         while (!inputManager->quitEventCheck()) {
-            if (frameTime >= 2000) {
-                state = 'q';
-                throw runtime_error("Game took too much time to render: " + to_string(frameTime));
-            }
-
-            frameStart = SDL_GetTicks();
-            curTime = SDL_GetTicks();
-            cout << "Frame delay: " << frameTime << endl;
             SDL_SetRenderDrawColor(ren, 86, 86, 86, 255);
             if (SDL_RenderClear(ren) < 0) {
                 SDL_DestroyWindow(win);
@@ -96,17 +86,6 @@ private:
                         }
                         break;
                 }
-                showDialog = true;
-                if (curTime >= endTime) {
-                    endTime = SDL_GetTicks() + 90;
-                    gameField->checkForNeighbors();
-                    gameField->drawBoard();
-                } else {
-                    gameField->drawBoard();
-                }
-
-                gameField->drawBoard();
-                uiManager->printText("Cells: " + to_string(gameField->getAliveCells()), 10, 20, {247, 217, 63}, 25);
                 SDL_RenderPresent(ren);
             }
             if (state == 'm') {
@@ -114,62 +93,8 @@ private:
                 state = uiMainMenu.act();
 
             }
-           /* if (inputManager->getEvent().key.keysym.sym == SDLK_p) {
-                if (inputManager->getEvent().type == SDL_KEYDOWN &&
-                    state == 'p')
-                    state = 'r';
-                else state = 'p';
-                continue;
-            }
-            if (state == 'p') {
-                uiManager->printText("PAUSE",
-                                     uiManager->getWindowResolutionX() /
-                                     2 - uiManager->getTextSize(
-                                             "PAUSE",
-                                             40).a,
-                                     uiManager->getWindowResolutionY() /
-                                     2 - uiManager->getTextSize(
-                                             "PAUSE",
-                                             40).b, {255, 0, 0}, 40);
-                frameStart = SDL_GetTicks();
-                SDL_RenderPresent(ren);
-                continue;
-
-            }*/
-            if (inputManager->getEvent().key.keysym.sym == SDLK_e && inputManager->getEvent().type == SDL_KEYDOWN &&
-                state == 'e') {
-                state = 'r';
-                if (gameField->countAliveCells() > 300)
-                    uiManager->printText("Wait a sec please...",
-                                         uiManager->getWindowResolutionX() /
-                                         2 - uiManager->getTextSize(
-                                                 "Wait a sec please...",
-                                                 40).a,
-                                         uiManager->getWindowResolutionY() /
-                                         2 - 20, {255, 0, 0}, 40);
-                SDL_RenderPresent(ren);
-                continue;
-            }
             if (state == 'e') {
-                switch (inputManager->getEvent().key.keysym.sym) {
-                    case SDLK_c:
-                        if (inputManager->getEvent().type == SDL_KEYDOWN)
-                            gameField->clearBoard();
-                        break;
-                }
-                if (showDialog) {
-                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-                                             "EDIT MODE",
-                                             "Включен режим редактирования.\nДля отчистки поля нажмите 'C'\nДля выхода из режима нажмите 'E",
-                                             NULL);
-                    gameField->checkForNeighbors();
-                    frameStart = SDL_GetTicks();
-                }
-                showDialog = false;
 
-                gameField->drawBoard();
-                uiManager->printText("Cells: " + to_string(gameField->countAliveCells()), 10, 20, {247, 217, 63}, 25);
-                uiEditGameField.show();
             }
             if (state == 'q') break;
 
@@ -179,7 +104,6 @@ private:
                 SDL_Delay(frameDelay - frameTime);
             }
         }
-        delete gameField;
         delete inputManager;
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destroying render");
         SDL_DestroyRenderer(ren);
