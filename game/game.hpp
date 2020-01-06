@@ -15,7 +15,6 @@
 using namespace std;
 class Game {
 private:
-    SDL_DisplayMode DM{};
     SDL_Window *win{};
     SDL_Renderer *ren{};
     InputManager *inputManager{};
@@ -29,24 +28,7 @@ public:
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", error.c_str());
             throw std::runtime_error("Unable to init SDL2");
         }
-        SDL_GetCurrentDisplayMode(0, &DM);
-        auto Width = DM.w;
-        auto Height = DM.h;
-        win = SDL_CreateWindow("The Game Of Life", 0, 0, 1280, 720, SDL_WINDOW_SHOWN);
 
-        if (win == nullptr) {
-            std::string error = SDL_GetError();
-            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", error.c_str());
-            throw std::runtime_error("Unable to create window (SDL2)");
-        }
-
-        ren = SDL_CreateRenderer(win, -1, 0);
-        if (ren == nullptr) {
-            SDL_DestroyWindow(win);
-            std::string error = SDL_GetError();
-            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", error.c_str());
-            throw std::runtime_error("Unable to create render (SDL2)");
-        }
 
         uiManager = new UI_Manager(SDL_GetWindowSurface(win), ren, win,
                                    nullptr); //init UI_Manager and font related stuff
