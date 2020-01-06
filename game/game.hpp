@@ -12,13 +12,16 @@
 #include "UI/ui_manager.hpp"
 #include "UI/ui_main_menu.hpp"
 #include "input_manager.hpp"
+#include "windows_manager.hpp"
+
 using namespace std;
+
 class Game {
 private:
-    SDL_Window *win{};
-    SDL_Renderer *ren{};
     InputManager *inputManager{};
-    UI_Manager *uiManager;
+    WindowsManager *winManager{};
+    UI_Manager *graphUI_Manger{};
+    UI_Manager *functionsUI_Manger{};
     char state = 'm';///< r-playing game| p-pause| m-main_Menu| e-Editing field
 public:
     Game() {
@@ -28,13 +31,17 @@ public:
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", error.c_str());
             throw std::runtime_error("Unable to init SDL2");
         }
+        winManager = new WindowsManager();
 
 
-        uiManager = new UI_Manager(SDL_GetWindowSurface(win), ren, win,
-                                   nullptr); //init UI_Manager and font related stuff
+        functionsUI_Manger = new UI_Manager(SDL_GetWindowSurface(winManager->getFunctionsWindow()),
+                                            winManager->getFunctionsWinRender(), winManager->getFunctionsWindow(),
+                                            nullptr); //init UI_Manager and font related stuff
+        graphUI_Manger = new UI_Manager(SDL_GetWindowSurface(winManager->getGraphWindow()),
+                                        winManager->getGraphWinRender(), winManager->getGraphWindow(),
+                                        nullptr); //init UI_Manager and font related stuff
         inputManager = new InputManager();
-        uiManager = new UI_Manager(SDL_GetWindowSurface(win), ren, win,
-                                   inputManager); //init UI_Manager and font related stuff
+
         SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "SDL2 init - Good\nGame Start");
         run(); // Starts the game
     }
@@ -48,17 +55,17 @@ private:
 
         int frameDelay = 2;
         bool showDialog = true;
-        UI_MainMenu uiMainMenu(uiManager, win, "ru");
+        // UI_MainMenu uiMainMenu(uiManager, win, "ru");
 
         while (!inputManager->quitEventCheck()) {
-            SDL_SetRenderDrawColor(ren, 86, 86, 86, 255);
-            if (SDL_RenderClear(ren) < 0) {
-                SDL_DestroyWindow(win);
-                std::string error = SDL_GetError();
-                SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", error.c_str());
-                throw std::runtime_error("Unable to clear render (SDL2)");
-            }
+            winManager->clearRenderer(winManager->getGraphWinRender());
+            winManager->clearRenderer(winManager->getFunctionsWinRender());
+            SDL_SetRenderDrawColor(winManager->getFunctionsWinRender(), 84, 135, 133, 255);
+            SDL_SetRenderDrawColor(winManager->getGraphWinRender(), 86, 135, 84, 255);
+            SDL_RenderPresent(winManager->getFunctionsWinRender());
+            SDL_RenderPresent(winManager->getGraphWinRender());
             inputManager->updateEvents();
+            /*
             if (state == 'r') {
                 switch (inputManager->getEvent().key.keysym.sym) {
                     case SDLK_e:
@@ -84,15 +91,16 @@ private:
             frameTime = SDL_GetTicks() - frameStart;
             if (frameDelay > frameTime) {
                 SDL_Delay(frameDelay - frameTime);
-            }
+            }*/
         }
         delete inputManager;
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destroying render");
-        SDL_DestroyRenderer(ren);
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Render Destroyed\nDestroying window");
-        SDL_DestroyWindow(win);
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destroyed window");
-        free(uiManager);
+        free(graphUI_Manger);
+        free(functionsUI_Manger);
+        SDL_DestroyRenderer(winManager->getGraphWinRender());
+        SDL_DestroyRenderer(winManager->getFunctionsWinRender());
+        SDL_DestroyWindow(winManager->getGraphWindow());
+        SDL_DestroyWindow(winManager->getFunctionsWindow());
+
         return 0;
     }
 };

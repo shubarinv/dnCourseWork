@@ -13,7 +13,7 @@
 #include <stdexcept>
 
 class WindowsManager {
-
+public:
     WindowsManager() {
         functionsWindow = SDL_CreateWindow("Functions", 0, 0, 350, 720, SDL_WINDOW_SHOWN);
         if (functionsWindow == nullptr) {
@@ -21,7 +21,7 @@ class WindowsManager {
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", error.c_str());
             throw std::runtime_error("Unable to create Functions window");
         }
-        graphWindow = SDL_CreateWindow("Graph", 0, 0, 720, 720, SDL_WINDOW_SHOWN);
+        graphWindow = SDL_CreateWindow("Graph", 350, 0, 720, 720, SDL_WINDOW_SHOWN);
         if (graphWindow == nullptr) {
             std::string error = SDL_GetError();
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", error.c_str());
@@ -42,8 +42,6 @@ class WindowsManager {
             throw std::runtime_error("Unable to create Graph render");
         }
     }
-
-public:
     [[nodiscard]] SDL_Window *getFunctionsWindow() const {
         return functionsWindow;
     }
@@ -58,6 +56,22 @@ public:
 
     [[nodiscard]] SDL_Renderer *getGraphWinRender() const {
         return graphWinRender;
+    }
+
+    void clearRenderer(SDL_Renderer *ren) {
+        if (SDL_RenderClear(ren) < 0) {
+            SDL_DestroyWindow(graphWindow);
+            SDL_DestroyWindow(functionsWindow);
+            std::string error = SDL_GetError();
+            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", error.c_str());
+            throw std::runtime_error("Unable to clear render (SDL2)");
+        }
+    }
+
+    SDL_Window *getFocusedWindow() {
+        if (SDL_GetWindowFlags(functionsWindow) & SDL_WINDOW_MOUSE_FOCUS)return functionsWindow;
+        if (SDL_GetWindowFlags(graphWindow) & SDL_WINDOW_MOUSE_FOCUS)return graphWindow;
+        return nullptr;
     }
 
 private:
