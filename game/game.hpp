@@ -62,6 +62,7 @@ private:
 		// UI_MainMenu uiMainMenu(uiManager, win, "ru");
 
 		while (!inputManager->quitEventCheck()) {
+		    frameStart=SDL_GetTicks();
 			winManager->clearRenderer(winManager->getGraphWinRender());
 			winManager->clearRenderer(winManager->getFunctionsWinRender());
 			SDL_SetRenderDrawColor(winManager->getFunctionsWinRender(), 84, 135, 133, 255);
@@ -72,35 +73,11 @@ private:
 			SDL_RenderPresent(winManager->getFunctionsWinRender());
 			SDL_RenderPresent(winManager->getGraphWinRender());
 
-			SDL_Delay(5);
-
-			/*
-			if (state == 'r') {
-				switch (inputManager->getEvent().key.keysym.sym) {
-					case SDLK_e:
-						if (inputManager->getEvent().type == SDL_KEYDOWN) {
-							state = 'e';
-							continue;
-						}
-						break;
-				}
-				SDL_RenderPresent(ren);
-			}
-			if (state == 'm') {
-				uiMainMenu.show();
-				state = uiMainMenu.act();
-
-			}
-			if (state == 'e') {
-
-			}
 			if (state == 'q') break;
-
-			SDL_RenderPresent(ren);
 			frameTime = SDL_GetTicks() - frameStart;
 			if (frameDelay > frameTime) {
 				SDL_Delay(frameDelay - frameTime);
-			}*/
+			}
 		}
 		delete inputManager;
 		free(graphUI_Manger);
