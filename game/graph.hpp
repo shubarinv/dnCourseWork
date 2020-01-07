@@ -27,8 +27,10 @@ public:
 		graphBG.y = 0;
 		graphBG.w = windowX;
 		graphBG.h = windowY;
-		if(!addLine({-windowWidth/2,0,windowWidth/2,0},{40,0,0,255}))
-			cout<<"Unable to add line due to issue with coords"<<endl;
+		windowWidth=windowX;
+		windowHeight=windowY;
+		addLine({-windowWidth/2,0,windowWidth/2,0},{40,0,0,255});
+		addLine({0,-windowHeight/2,0,windowHeight/2},{40,0,0,255});
 	}
 
 	bool addLine(Line::Coords lineCoords, SDL_Color color) {
@@ -37,6 +39,7 @@ public:
 		    lineCoords.y2 > windowHeight / 2 || lineCoords.y2 < -windowHeight / 2) {
 			return false;
 		}
+		cout<<lineCoords.x1<<" "<<lineCoords.x2<<" "<<lineCoords.y1<<" "<<lineCoords.y2<<endl;
 		lines.emplace_back(translateToWindowCoords(lineCoords), color);
 		return true;
 	}
@@ -58,14 +61,15 @@ private:
 		if (coords.x2 > 0) tmp.x2 = coords.x2 + windowWidth / 2;
 		if (coords.y1 > 0) tmp.y1 = coords.y1 + windowHeight / 2;
 		if (coords.y2 > 0) tmp.y2 = coords.y2 + windowHeight / 2;
-		if (coords.x1 < 0) tmp.x1 = windowWidth / 2 - coords.x1;
-		if (coords.x2 < 0) tmp.x2 = windowWidth / 2 - coords.x2;
-		if (coords.y1 < 0) tmp.y1 = windowHeight / 2 - coords.y1;
-		if (coords.y2 < 0) tmp.y2 = windowHeight / 2 - coords.y2;
+		if (coords.x1 < 0) tmp.x1 = windowWidth / 2 + coords.x1;
+		if (coords.x2 < 0) tmp.x2 = windowWidth / 2 + coords.x2;
+		if (coords.y1 < 0) tmp.y1 = windowHeight / 2 + coords.y1;
+		if (coords.y2 < 0) tmp.y2 = windowHeight / 2 + coords.y2;
 		if (coords.x1 == 0)tmp.x1 = windowWidth / 2;
 		if (coords.x2 == 0)tmp.x2 = windowWidth / 2;
 		if (coords.y1 == 0)tmp.y1 = windowHeight / 2;
 		if (coords.y2 == 0)tmp.y2 = windowHeight / 2;
+        cout<<tmp.x1<<" "<<tmp.x2<<" "<<tmp.y1<<" "<<tmp.y2<<endl;
 		return tmp;
 	}
 };
