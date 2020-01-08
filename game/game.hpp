@@ -14,16 +14,19 @@
 #include "input_manager.hpp"
 #include "windows_manager.hpp"
 #include "graph.hpp"
+#include "graph_builder.hpp"
+
 
 using namespace std;
 
 class Game {
 private:
-	InputManager *inputManager{};
-	WindowsManager *winManager{};
-	UI_Manager *graphUI_Manger{};
-	UI_Manager *functionsUI_Manger{};
-	Graph *graph{};
+    InputManager *inputManager{};
+    WindowsManager *winManager{};
+    UI_Manager *graphUI_Manger{};
+    UI_Manager *functionsUI_Manger{};
+    GraphBuilder *graphBuilder{};
+    Graph *graph{};
 	char state = 'm';///< r-playing game| p-pause| m-main_Menu| e-Editing field
 public:
 	Game() {
@@ -36,19 +39,20 @@ public:
 		winManager = new WindowsManager();
 
 
-		functionsUI_Manger = new UI_Manager(SDL_GetWindowSurface(winManager->getFunctionsWindow()),
-		                                    winManager->getFunctionsWinRender(), winManager->getFunctionsWindow(),
-		                                    nullptr); //init UI_Manager and font related stuff
-		graphUI_Manger = new UI_Manager(SDL_GetWindowSurface(winManager->getGraphWindow()),
-		                                winManager->getGraphWinRender(), winManager->getGraphWindow(),
-		                                nullptr); //init UI_Manager and font related stuff
-		inputManager = new InputManager();
-		int h, w;
-		SDL_GetWindowSize(winManager->getGraphWindow(), &w, &h);
-		graph = new Graph(winManager->getGraphWinRender(), h, w);
-		SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "SDL2 init - Good\nGame Start");
-		run(); // Starts the game
-	}
+        functionsUI_Manger = new UI_Manager(SDL_GetWindowSurface(winManager->getFunctionsWindow()),
+                                            winManager->getFunctionsWinRender(), winManager->getFunctionsWindow(),
+                                            nullptr); //init UI_Manager and font related stuff
+        graphUI_Manger = new UI_Manager(SDL_GetWindowSurface(winManager->getGraphWindow()),
+                                        winManager->getGraphWinRender(), winManager->getGraphWindow(),
+                                        nullptr); //init UI_Manager and font related stuff
+        inputManager = new InputManager();
+        int h, w;
+        SDL_GetWindowSize(winManager->getGraphWindow(), &w, &h);
+        graph = new Graph(winManager->getGraphWinRender(), h, w);
+        graphBuilder = new GraphBuilder(graph);
+        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "SDL2 init - Good\nGame Start");
+        run(); // Starts the game
+    }
 
 private:
 	int run() {
@@ -58,9 +62,7 @@ private:
 		Uint64 endTime = 0;
 
 		int frameDelay = 2;
-		bool showDialog = true;
-		// UI_MainMenu uiMainMenu(uiManager, win, "ru");
-
+        graphBuilder->buildGraph("x^0.5");
 		while (!inputManager->quitEventCheck()) {
 		    frameStart=SDL_GetTicks();
 			winManager->clearRenderer(winManager->getGraphWinRender());
