@@ -18,6 +18,7 @@ public:
 
 	Line(Coords location, SDL_Color _color) {
 		coords = location;
+		cout << "INT x1:" << coords.x1 << " y1:" << coords.y1 << " x2:" << coords.x1 << " y2:" << coords.y2 << endl;
 		color = _color;
 	}
 	void draw(SDL_Renderer* renderer){
