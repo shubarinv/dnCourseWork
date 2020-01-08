@@ -12,21 +12,31 @@
 
 class Graph {
 private:
-	SDL_Renderer *renderer{};
-	std::list<Line> lines{};
-	int windowHeight{0};
-	int windowWidth{0};
-	SDL_Rect graphBG{};
+    SDL_Renderer *renderer{};
+    std::list<Line> lines{};
+    int windowHeight{0};
+    int windowWidth{0};
 public:
-	Graph(SDL_Renderer *_renderer, int windowX, int windowY) {
-		if (_renderer == nullptr) {
-			throw std::runtime_error("Graph::Graph() renderer is NULL");
-		}
-		renderer = _renderer;
-		graphBG.x = 0;
-		graphBG.y = 0;
-		graphBG.w = windowX;
-		graphBG.h = windowY;
+    int getWindowHeight() const {
+        return windowHeight;
+    }
+
+    int getWindowWidth() const {
+        return windowWidth;
+    }
+
+private:
+    SDL_Rect graphBG{};
+public:
+    Graph(SDL_Renderer *_renderer, int windowX, int windowY) {
+        if (_renderer == nullptr) {
+            throw std::runtime_error("Graph::Graph() renderer is NULL");
+        }
+        renderer = _renderer;
+        graphBG.x = 0;
+        graphBG.y = 0;
+        graphBG.w = windowX;
+        graphBG.h = windowY;
 		windowWidth=windowX;
 		windowHeight=windowY;
 		addLine({-windowWidth/2,0,windowWidth/2,0},{0,0,0,255});
