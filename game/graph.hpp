@@ -12,73 +12,85 @@
 
 class Graph {
 private:
-	SDL_Renderer *renderer{};
-	std::list<Line> lines{};
-	int windowHeight{0};
-	int windowWidth{0};
+    SDL_Renderer *renderer{};
+    std::list<Line> lines{};
+    int windowHeight{0};
+    int windowWidth{0};
 public:
-	int getWindowHeight() const {
-		return windowHeight;
-	}
+    int getWindowHeight() const {
+        return windowHeight;
+    }
 
-	int getWindowWidth() const {
-		return windowWidth;
-	}
+    int getWindowWidth() const {
+        return windowWidth;
+    }
 
 private:
-	SDL_Rect graphBG{};
+    SDL_Rect graphBG{};
 public:
-	Graph(SDL_Renderer *_renderer, int windowX, int windowY) {
-		if (_renderer == nullptr) {
-			throw std::runtime_error("Graph::Graph() renderer is NULL");
-		}
-		renderer = _renderer;
-		graphBG.x = 0;
-		graphBG.y = 0;
-		graphBG.w = windowX;
-		graphBG.h = windowY;
-		windowWidth = windowX;
-		windowHeight = windowY;
-		addLine({-windowWidth / 2, 0, windowWidth / 2, 0}, {0, 0, 0, 255});
-		addLine({0, -windowHeight / 2, 0, windowHeight / 2}, {0, 0, 0, 255});
-	}
+    Graph(SDL_Renderer *_renderer, int windowX, int windowY) {
+        if (_renderer == nullptr) {
+            throw std::runtime_error("Graph::Graph() renderer is NULL");
+        }
+        renderer = _renderer;
+        graphBG.x = 0;
+        graphBG.y = 0;
+        graphBG.w = windowX;
+        graphBG.h = windowY;
+        windowWidth = windowX;
+        windowHeight = windowY;
+        addLine({-windowWidth / 2, 0, windowWidth / 2, 0}, {0, 0, 0, 255});
+        addLine({0, -windowHeight / 2, 0, windowHeight / 2}, {0, 0, 0, 255});
+    }
 
-	bool addLine(Line::Coords lineCoords, SDL_Color color) {
-		cout << "GOT x1:" << lineCoords.x1 << " y1:" << lineCoords.y1 << " x2:" << lineCoords.x1 << " y2:"
-		     << lineCoords.y2 << endl;
+    bool addLine(Line::Coords lineCoords, SDL_Color color) {
+        cout << "GOT x1:" << lineCoords.x1 << " y1:" << lineCoords.y1 << " x2:" << lineCoords.x1 << " y2:"
+             << lineCoords.y2 << endl;
 
-		if (lineCoords.x1 > windowWidth / 2 || lineCoords.x1 < -windowWidth / 2 || lineCoords.x2 > windowWidth / 2 ||
-		    lineCoords.x2 < -windowWidth / 2 || lineCoords.y1 > windowHeight / 2 || lineCoords.y1 < -windowHeight / 2 ||
-		    lineCoords.y2 > windowHeight / 2 || lineCoords.y2 < -windowHeight / 2) {
-			return false;
-		}
-		lines.emplace_back(translateToWindowCoords(lineCoords), color);
+        if (lineCoords.x1 > windowWidth / 2 || lineCoords.x1 < -windowWidth / 2 || lineCoords.x2 > windowWidth / 2 ||
+            lineCoords.x2 < -windowWidth / 2) {
+            return false;
+        }
+        if (lineCoords.y1 > windowHeight / 2 && lineCoords.y2 > windowHeight / 2)
+            return false;
+        if (lineCoords.y2 < -windowHeight / 2 && lineCoords.y1 < -windowHeight / 2)
+            return false;
 
-		return true;
-	}
+        if (lineCoords.y1 > windowHeight / 2 && lineCoords.y2 <= windowHeight / 2)
+            lineCoords.y1 = windowHeight / 2;
+        if (lineCoords.y1 < -windowHeight / 2 && lineCoords.y2 >= -windowHeight / 2)
+            lineCoords.y1 = -windowHeight / 2;
+        if (lineCoords.y2 > windowHeight / 2 && lineCoords.y1 <= windowHeight / 2)
+            lineCoords.y2 = windowHeight / 2;
+        if (lineCoords.y2 < -windowHeight / 2 && lineCoords.y1 >= -windowHeight / 2)
+            lineCoords.y2 = -windowHeight / 2;
+        lines.emplace_back(translateToWindowCoords(lineCoords), color);
+
+        return true;
+    }
 
 
-	void draw() {
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderDrawRect(renderer, &graphBG);
-		SDL_RenderFillRect(renderer, &graphBG);
-		for (auto line : lines) {
-			line.draw(renderer);
-		}
-	}
+    void draw() {
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderDrawRect(renderer, &graphBG);
+        SDL_RenderFillRect(renderer, &graphBG);
+        for (auto line : lines) {
+            line.draw(renderer);
+        }
+    }
 
 private:
-	Line::Coords translateToWindowCoords(Line::Coords coords) {
-		Line::Coords tmp{};
+    Line::Coords translateToWindowCoords(Line::Coords coords) {
+        Line::Coords tmp{};
 
 
-		tmp.x2 = coords.x2 + windowWidth / 2;
-		tmp.y1 = windowHeight / 2 - coords.y1;;
-		tmp.y2 = windowHeight / 2 - coords.y2;
-		tmp.x1 = windowWidth / 2 + coords.x1;
+        tmp.x2 = coords.x2 + windowWidth / 2;
+        tmp.y1 = windowHeight / 2 - coords.y1;
+        tmp.y2 = windowHeight / 2 - coords.y2;
+        tmp.x1 = windowWidth / 2 + coords.x1;
 
-		return tmp;
-	}
+        return tmp;
+    }
 };
 
 

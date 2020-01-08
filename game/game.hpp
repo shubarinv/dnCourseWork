@@ -62,7 +62,7 @@ private:
 		Uint64 endTime = 0;
 
 		int frameDelay = 2;
-        graphBuilder->buildGraph("x^0.5");
+        graphBuilder->buildGraph("x^2");
 		while (!inputManager->quitEventCheck()) {
 		    frameStart=SDL_GetTicks();
 			winManager->clearRenderer(winManager->getGraphWinRender());

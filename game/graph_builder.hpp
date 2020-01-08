@@ -39,7 +39,8 @@ public:
     }
 
     void buildGraph(std::string expression) {
-        for (int i = -graph->getWindowWidth() / 2; i <= graph->getWindowWidth() / 2; i++) {
+        for (int i = -graph->getWindowWidth() / 10; i <= graph->getWindowWidth() / 10; i++) {
+            cout << "---------------------" << endl;
             string y1 = expression;
             cout << "y1:" << y1 << endl;
             findAndReplaceAll(y1, "x", to_string(i));
