@@ -16,12 +16,21 @@ class InputManager {
     };
 private:
     SDL_Event event;
+public:
+    void setEvent(const SDL_Event &event);
+
+private:
     Uint8 mouseState{};
 public:
     Uint8 getMouseState() const;
 
-public:
-    const SDL_Event &getEvent() const;
+    SDL_Event getEvent() {
+        return event;
+    }
+
+    SDL_Event *getEventAddress() {
+        return &event;
+    }
 
 private:
     mouseCoords mouseCoords;
@@ -42,16 +51,18 @@ public:
     }
 
     [[nodiscard]] const struct mouseCoords &getMouseCoords() const {
+
         return mouseCoords;
     }
 };
 
-const SDL_Event &InputManager::getEvent() const {
-    return event;
-}
 
 Uint8 InputManager::getMouseState() const {
     return mouseState;
+}
+
+void InputManager::setEvent(const SDL_Event &event) {
+    InputManager::event = event;
 }
 
 

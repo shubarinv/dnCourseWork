@@ -13,6 +13,9 @@
 #include <stdexcept>
 
 class WindowsManager {
+    struct twoInt {
+        int x, y;
+    };
 public:
     WindowsManager() {
         functionsWindow = SDL_CreateWindow("Functions", 0, 0, 350, 720, SDL_WINDOW_SHOWN);
@@ -56,6 +59,12 @@ public:
 
     [[nodiscard]] SDL_Renderer *getGraphWinRender() const {
         return graphWinRender;
+    }
+
+    static twoInt getWindowSize(SDL_Window *window) {
+        twoInt winSize{};
+        SDL_GetWindowSize(window, &winSize.x, &winSize.y);
+        return winSize;
     }
 
     void clearRenderer(SDL_Renderer *ren) {

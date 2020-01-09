@@ -18,8 +18,8 @@ private:
     SDL_Color disabledColor{82, 82, 82};
     UI_Manager *uiManager{};
     std::string text = "UNSET";
-    int textPosX;
-    int textPosY;
+    int textPosX{};
+    int textPosY{};
     bool enabled{true};
     bool hover{false};
     int fontSize{20};

@@ -39,7 +39,8 @@ public:
     }
 
     void buildGraph(std::string expression) {
-        for (int i = -graph->getWindowWidth() / 10; i <= graph->getWindowWidth() / 10; i++) {
+        double i = -graph->getWindowWidth() / 20;
+        while (i <= graph->getWindowWidth() / 20) {
             cout << "---------------------" << endl;
             string y1 = expression;
             cout << "y1:" << y1 << endl;
@@ -48,11 +49,13 @@ public:
 
             string y2 = expression;
             cout << "y2:" << y2 << endl;
-            findAndReplaceAll(y2, "x", to_string(i + 1));
+            findAndReplaceAll(y2, "x", to_string(i + 0.1));
             cout << "y2:" << y2 << endl;
-
-            graph->addLine({i, (int) te_interp(y1.c_str(), 0), i + 1, (int) te_interp(y2.c_str(), 0)},
+            cout << "TINY y1 " << te_interp(y1.c_str(), 0) << "  y2 " << te_interp(y2.c_str(), 0) << endl;
+            graph->addLine({(int) (i * 10), (int) (te_interp(y1.c_str(), 0) * 10), (int) ((i + 0.1) * 10),
+                            (int) (te_interp(y2.c_str(), 0) * 10)},
                            {255, 0, 0, 255});
+            i += 0.1;
         }
     }
 

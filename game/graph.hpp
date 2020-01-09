@@ -46,7 +46,15 @@ public:
     bool addLine(Line::Coords lineCoords, SDL_Color color) {
         cout << "GOT x1:" << lineCoords.x1 << " y1:" << lineCoords.y1 << " x2:" << lineCoords.x1 << " y2:"
              << lineCoords.y2 << endl;
-
+        if (lineCoords.y1 <= -2000000000 || lineCoords.y1 > 2000000000 || lineCoords.y2 <= -2000000000 ||
+            lineCoords.y2 > 2000000000)
+            return false; /*при достижении космического значения не добавляет линию в график*/
+/*
+        if (lineCoords.x1 > windowWidth / 2 || lineCoords.x1 < -windowWidth / 2 || lineCoords.x2 > windowWidth / 2 ||
+            lineCoords.x2 < -windowWidth / 2 || lineCoords.y1 > windowHeight / 2 || lineCoords.y1 < -windowHeight / 2 ||
+            lineCoords.y2 > windowHeight / 2 || lineCoords.y2 < -windowHeight / 2) {
+            return false;
+        }*/
         if (lineCoords.x1 > windowWidth / 2 || lineCoords.x1 < -windowWidth / 2 || lineCoords.x2 > windowWidth / 2 ||
             lineCoords.x2 < -windowWidth / 2) {
             return false;
