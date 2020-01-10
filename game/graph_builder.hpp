@@ -38,8 +38,9 @@ public:
         graph = _graph;
     }
 
-    void buildGraph(std::string expression) {
+    void buildGraph(uiFunctionsRecord *record) {
         double i = -graph->getWindowWidth() / 20;
+        const string &expression = record->getFunction();
         while (i <= graph->getWindowWidth() / 20) {
             cout << "---------------------" << endl;
             string y1 = expression;
@@ -54,7 +55,7 @@ public:
             cout << "TINY y1 " << te_interp(y1.c_str(), 0) << "  y2 " << te_interp(y2.c_str(), 0) << endl;
             graph->addLine({(int) (i * 10), (int) (te_interp(y1.c_str(), 0) * 10), (int) ((i + 0.1) * 10),
                             (int) (te_interp(y2.c_str(), 0) * 10)},
-                           {255, 0, 0, 255});
+                           record->getColor());
             i += 0.1;
         }
     }

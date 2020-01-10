@@ -62,7 +62,7 @@ private:
         Uint64 endTime = 0;
 
         int frameDelay = 2;
-
+        uiFunctionsRecord *tmp;
         while (!inputManager->quitEventCheck()) {
             frameStart = SDL_GetTicks();
             SDL_SetRenderDrawColor(winManager->getFunctionsWinRender(), 212, 254, 249, 255);
@@ -71,7 +71,10 @@ private:
             winManager->clearRenderer(winManager->getFunctionsWinRender());
             inputManager->updateEvents();
             uiFunctions->show();
-            graphBuilder->buildGraph(uiFunctions->act());
+            tmp = uiFunctions->act();
+            if (tmp != nullptr) {
+                graphBuilder->buildGraph(tmp);
+            }
             graph->draw();
 
             SDL_RenderPresent(winManager->getFunctionsWinRender());
