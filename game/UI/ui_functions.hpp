@@ -18,8 +18,31 @@ class uiFunctionsRecord {
     string function;
     SDL_Color color{};
     uiButton *deleteBtn{};
+public:
+    [[nodiscard]] uiButton *getDeleteBtn() const {
+        return deleteBtn;
+    }
+
+private:
     SDL_Rect colorRef{};
+    bool remove{false};
+public:
+    void setRemove(bool _remove) {
+        uiFunctionsRecord::remove = _remove;
+    }
+
+public:
+    [[nodiscard]] bool isRemove() {
+        return !deleteBtn->isEnabled();
+    }
+
+private:
     int x{}, y{};
+public:
+    int getY() const {
+        return y;
+    }
+
 public:
     [[nodiscard]] const string &getFunction() const {
         return function;
@@ -39,26 +62,39 @@ public:
         colorRef.w = 50;
         colorRef.h = 30;
         deleteBtn = new uiButton("X", uiManager, ui_Manager->getWindowResolutionX() - 35, y, 30, 30, 25);
-        deleteBtn->setEnabled(false);
+        //deleteBtn->setEnabled(false);
         randomiseColor();
     }
 
     void draw() {
-        SDL_RenderDrawRect(uiManager->getRenderer(), &colorRef);
-        SDL_SetRenderDrawColor(uiManager->getRenderer(), color.r, color.g, color.b, 255);
-        SDL_FillRect(SDL_GetWindowSurface(uiManager->getWindow()), &colorRef, UI_Manager::rgbToHex(color));
-        SDL_RenderFillRect(uiManager->getRenderer(), &colorRef);
-        uiManager->printText(function, 10, y, color, 25);
-        deleteBtn->draw(0, 0);
+        if (!remove) {
+            deleteBtn->setXandY(uiManager->getWindowResolutionX() - 35, y);
+            SDL_RenderDrawRect(uiManager->getRenderer(), &colorRef);
+            SDL_SetRenderDrawColor(uiManager->getRenderer(), color.r, color.g, color.b, 255);
+            SDL_FillRect(SDL_GetWindowSurface(uiManager->getWindow()), &colorRef, UI_Manager::rgbToHex(color));
+            SDL_RenderFillRect(uiManager->getRenderer(), &colorRef);
+            uiManager->printText(function, 10, y, color, 25);
+            deleteBtn->draw(uiManager->getInputManager()->getMouseCoords().x,
+                            uiManager->getInputManager()->getMouseCoords().y);
+            if (deleteBtn->isHover() && uiManager->getInputManager()->getMouseState() & SDL_BUTTON_LMASK) {
+                deleteBtn->setEnabled(false);
+
+            }
+        }
+    }
+
+    static bool recordRemovalCheck(uiFunctionsRecord record) {
+        //cout << !record.getDeleteBtn()->isEnabled() << endl;
+        return !record.getDeleteBtn()->isEnabled();
     }
 
 private:
     UI_Manager *uiManager;
 
     void randomiseColor() {
-        color.r = randIntInRange(0, 180);
-        color.g = randIntInRange(0, 180);
-        color.b = randIntInRange(0, 180);
+        color.r = randIntInRange(0, 200);
+        color.g = randIntInRange(0, 200);
+        color.b = randIntInRange(0, 200);
         color.a = 255;
     }
 
@@ -91,6 +127,9 @@ public:
         uiTextField::enable();
     }
 
+    void checkForRemovals() {
+        functions.remove_if(uiFunctionsRecord::recordRemovalCheck);
+    }
 
     void show() {
         if (addNewGraph) {
@@ -103,9 +142,9 @@ public:
             newGraph_btn->draw(uiManager->getInputManager()->getMouseCoords().x,
                                uiManager->getInputManager()->getMouseCoords().y);
         }
-        int i = 1;
+        int i = 0;
         uiManager->printText("Used Functions:", 10, 150, {196, 79, 79}, 25);
-        for (uiFunctionsRecord function:functions) {
+        for (uiFunctionsRecord function:functions) { ;
             function.draw();
             i++;
         }
@@ -123,11 +162,20 @@ public:
             show();
             string input = getText();
             if (!input.empty() || input != " ") {
-                functions.emplace_back(uiManager, input, 10, 180 + 30 * functions.size());
+                int i = 0;
+                while (!isYAvailable(180 + 30 * i)) { i++; }
+                functions.emplace_back(uiManager, input, 10, 180 + 30 * i);
                 return &functions.back();
             }
         }
         return nullptr;
+    }
+
+    bool isYAvailable(int y) {
+        for (uiFunctionsRecord func:functions) {
+            if (func.getY() == y)return false;
+        }
+        return true;
     }
 
     string getText() {

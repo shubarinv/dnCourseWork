@@ -39,11 +39,11 @@ public:
         graphBG.h = windowY;
         windowWidth = windowX;
         windowHeight = windowY;
-        addLine({-windowWidth / 2, 0, windowWidth / 2, 0}, {0, 0, 0, 255});
-        addLine({0, -windowHeight / 2, 0, windowHeight / 2}, {0, 0, 0, 255});
+        addLine({-windowWidth / 2, 0, windowWidth / 2, 0}, {0, 0, 0, 255}, nullptr);
+        addLine({0, -windowHeight / 2, 0, windowHeight / 2}, {0, 0, 0, 255}, nullptr);
     }
 
-    bool addLine(Line::Coords lineCoords, SDL_Color color) {
+    bool addLine(Line::Coords lineCoords, SDL_Color color, uiFunctionsRecord *owner) {
         cout << "GOT x1:" << lineCoords.x1 << " y1:" << lineCoords.y1 << " x2:" << lineCoords.x1 << " y2:"
              << lineCoords.y2 << endl;
         if (lineCoords.y1 <= -2000000000 || lineCoords.y1 > 2000000000 || lineCoords.y2 <= -2000000000 ||
@@ -72,13 +72,17 @@ public:
             lineCoords.y2 = windowHeight / 2;
         if (lineCoords.y2 < -windowHeight / 2 && lineCoords.y1 >= -windowHeight / 2)
             lineCoords.y2 = -windowHeight / 2;
-        lines.emplace_back(translateToWindowCoords(lineCoords), color);
+        lines.emplace_back(translateToWindowCoords(lineCoords), color, owner);
 
         return true;
     }
 
+    void checkForRemovals() {
+        lines.remove_if(Line::removalCheck);
+    }
 
     void draw() {
+        checkForRemovals();
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderDrawRect(renderer, &graphBG);
         SDL_RenderFillRect(renderer, &graphBG);

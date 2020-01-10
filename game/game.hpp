@@ -79,7 +79,7 @@ private:
 
             SDL_RenderPresent(winManager->getFunctionsWinRender());
             SDL_RenderPresent(winManager->getGraphWinRender());
-
+            uiFunctions->checkForRemovals();
             if (state == 'q') break;
             frameTime = SDL_GetTicks() - frameStart;
             if (frameDelay > frameTime) {

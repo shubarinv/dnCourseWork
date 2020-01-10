@@ -22,8 +22,6 @@ public:
 private:
     Uint8 mouseState{};
 public:
-    Uint8 getMouseState() const;
-
     SDL_Event getEvent() {
         return event;
     }
@@ -54,12 +52,13 @@ public:
 
         return mouseCoords;
     }
+
+    Uint8 getMouseState() {
+        SDL_GetMouseState(&mouseCoords.x, &mouseCoords.y);
+        return mouseState;
+    }
 };
 
-
-Uint8 InputManager::getMouseState() const {
-    return mouseState;
-}
 
 void InputManager::setEvent(const SDL_Event &event) {
     InputManager::event = event;

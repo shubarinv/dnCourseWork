@@ -57,6 +57,11 @@ public:
         return x >= body.x && x <= body.x + body.w && y >= body.y && y <= body.y + body.h;
     }
 
+    void setXandY(int _x, int _y) {
+        body.x = _x;
+        body.y = _y;
+    }
+
     void calculateTextPosition() {
         int textWidth = uiManager->getTextSize(text, fontSize).a;
         int textHeight = uiManager->getTextSize(text, fontSize).b;
