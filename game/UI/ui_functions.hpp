@@ -83,7 +83,7 @@ public:
         }
     }
 
-    static bool recordRemovalCheck(uiFunctionsRecord record) {
+    static bool recordRemovalCheck(const uiFunctionsRecord &record) {
         //cout << !record.getDeleteBtn()->isEnabled() << endl;
         return !record.getDeleteBtn()->isEnabled();
     }
@@ -172,7 +172,7 @@ public:
     }
 
     bool isYAvailable(int y) {
-        for (uiFunctionsRecord func:functions) {
+        for (const uiFunctionsRecord &func:functions) {
             if (func.getY() == y)return false;
         }
         return true;

@@ -45,9 +45,12 @@ public:
         functionsUI_Manger = new UI_Manager(SDL_GetWindowSurface(winManager->getFunctionsWindow()),
                                             winManager->getFunctionsWinRender(), winManager->getFunctionsWindow(),
                                             inputManager); //init UI_Manager and font related stuff
+        graphUI_Manger = new UI_Manager(SDL_GetWindowSurface(winManager->getGraphWindow()),
+                                        winManager->getGraphWinRender(), winManager->getGraphWindow(),
+                                        inputManager); //init UI_Manager and font related stuff
         int h, w;
         SDL_GetWindowSize(winManager->getGraphWindow(), &w, &h);
-        graph = new Graph(winManager->getGraphWinRender(), h, w);
+        graph = new Graph(winManager->getGraphWinRender(), h, w, graphUI_Manger);
         graphBuilder = new GraphBuilder(graph);
         uiFunctions = new ui_Functions(functionsUI_Manger, winManager->getFunctionsWindow(), "ru");
         SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "SDL2 init - Good\nGame Start");

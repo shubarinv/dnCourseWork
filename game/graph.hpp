@@ -13,6 +13,7 @@
 class Graph {
 private:
     SDL_Renderer *renderer{};
+    UI_Manager *ui_Manager{};
     std::list<Line> lines{};
     int windowHeight{0};
     int windowWidth{0};
@@ -28,7 +29,7 @@ public:
 private:
     SDL_Rect graphBG{};
 public:
-    Graph(SDL_Renderer *_renderer, int windowX, int windowY) {
+    Graph(SDL_Renderer *_renderer, int windowX, int windowY, UI_Manager *_uiManager) {
         if (_renderer == nullptr) {
             throw std::runtime_error("Graph::Graph() renderer is NULL");
         }
@@ -39,6 +40,7 @@ public:
         graphBG.h = windowY;
         windowWidth = windowX;
         windowHeight = windowY;
+        ui_Manager = _uiManager;
         addLine({-windowWidth / 2, 0, windowWidth / 2, 0}, {0, 0, 0, 255}, nullptr);
         addLine({0, -windowHeight / 2, 0, windowHeight / 2}, {0, 0, 0, 255}, nullptr);
     }
@@ -89,6 +91,7 @@ public:
         for (auto line : lines) {
             line.draw(renderer);
         }
+        drawNumerics();
     }
 
 private:
@@ -99,9 +102,19 @@ private:
         tmp.x2 = coords.x2 + windowWidth / 2;
         tmp.y1 = windowHeight / 2 - coords.y1;
         tmp.y2 = windowHeight / 2 - coords.y2;
-        tmp.x1 = windowWidth / 2 + coords.x1;
+        tmp.x1 = coords.x1 + windowWidth / 2;
 
         return tmp;
+    }
+
+    void drawNumerics() {
+        for (int i = -windowWidth / 2; i <= windowWidth / 2 + 1; i += 72) {
+            if (i == -10)continue;
+            ui_Manager->printText(to_string(i), i + windowWidth / 2, windowHeight / 2 - 24, {0, 0, 0}, 15);
+        }
+        for (int i = -windowHeight / 2; i <= windowHeight / 2; i += 72) {
+            ui_Manager->printText(to_string(i), windowWidth / 2 - 30, i + windowHeight / 2, {0, 0, 0}, 15);
+        }
     }
 };
 
