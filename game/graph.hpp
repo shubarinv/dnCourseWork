@@ -108,12 +108,12 @@ private:
     }
 
     void drawNumerics() {
-        for (int i = -windowWidth / 2; i <= windowWidth / 2 + 1; i += 72) {
-            if (i == -10)continue;
-            ui_Manager->printText(to_string(i), i + windowWidth / 2, windowHeight / 2 - 24, {0, 0, 0}, 15);
+        for (int i = -windowWidth / 20; i <= windowWidth / 20 + 1; i += 6) {
+            ui_Manager->printText(to_string(i), i * 10 + windowWidth / 2, windowHeight / 2 - 7, {0, 0, 0}, 15, true);
         }
-        for (int i = -windowHeight / 2; i <= windowHeight / 2; i += 72) {
-            ui_Manager->printText(to_string(i), windowWidth / 2 - 30, i + windowHeight / 2, {0, 0, 0}, 15);
+        for (int i = windowHeight / 20; i >= -windowHeight / 20; i -= 6) {
+            if (i == 0)continue;
+            ui_Manager->printText(to_string(i), windowWidth / 2 - 20, windowHeight / 2 - i * 10, {0, 0, 0}, 15, true);
         }
     }
 };

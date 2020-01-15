@@ -91,7 +91,7 @@ public:
         SDL_Rect Message_rect; //create a rect
         if (centred) {
             Message_rect.x = x - getTextSize(text, font_size).a / 2;  //controls the rect's x coordinate
-            Message_rect.y = y + getTextSize(text, font_size).b / 2; // controls the rect's y coordinate
+            Message_rect.y = y - getTextSize(text, font_size).b / 2; // controls the rect's y coordinate
         } else {
             Message_rect.x = x;  //controls the rect's x coordinate
             Message_rect.y = y; // controls the rect's y coordinate
