@@ -1,6 +1,4 @@
-//
-// Created by vhundef on 07.01.2020.
-//
+
 
 #ifndef DNCOURSEWORK_GRAPH_BUILDER_HPP
 #define DNCOURSEWORK_GRAPH_BUILDER_HPP
@@ -42,21 +40,33 @@ public:
         double i = -graph->getWindowWidth() / 20;
         const string &expression = record->getFunction();
         while (i <= graph->getWindowWidth() / 20) {
-            cout << "---------------------" << endl;
-            string y1 = expression;
-            cout << "y1:" << y1 << endl;
-            findAndReplaceAll(y1, "x", to_string(i));
-            cout << "y1:" << y1 << endl;
+	        cout << "---------------------" << endl;
+	        string y1 = expression;
+	        cout << "y1:" << y1 << endl;
+	        findAndReplaceAll(y1, "x", to_string(i));
+	        cout << "y1:" << y1 << endl;
 
-            string y2 = expression;
-            cout << "y2:" << y2 << endl;
-            findAndReplaceAll(y2, "x", to_string(i + 0.1));
-            cout << "y2:" << y2 << endl;
-            cout << "TINY y1 " << te_interp(y1.c_str(), 0) << "  y2 " << te_interp(y2.c_str(), 0) << endl;
-            graph->addLine({(int) (i * 10), (int) (te_interp(y1.c_str(), 0) * 10), (int) ((i + 0.1) * 10),
-                            (int) (te_interp(y2.c_str(), 0) * 10)},
-                           record->getColor(), record);
-            i += 0.1;
+	        string y2 = expression;
+	        cout << "y2:" << y2 << endl;
+	        findAndReplaceAll(y2, "x", to_string(i + 0.1));
+	        cout << "y2:" << y2 << endl;
+	        int *error = nullptr;
+	        double y1_val = te_interp(y1.c_str(), error) * 10;
+	        if (error != nullptr || (int) y1_val == -2147483648) {
+		        record->getDeleteBtn()->setEnabled(false);
+		        cout << "ERROR IN EXPR" << endl;
+		        break;
+	        }
+	        double y2_val = te_interp(y2.c_str(), error) * 10;
+	        if (error != nullptr || (int) y2_val == -2147483648) {
+		        record->getDeleteBtn()->setEnabled(false);
+		        cout << "ERROR IN EXPR" << endl;
+		        break;
+	        }
+	        graph->addLine({(int) (i * 10), (int) (y1_val), (int) ((i + 0.1) * 10),
+	                        (int) (y2_val)},
+	                       record->getColor(), record);
+	        i += 0.1;
         }
     }
 

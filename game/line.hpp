@@ -1,6 +1,3 @@
-//
-// Created by vhundef on 06.01.2020.
-//
 
 #ifndef DNCOURSEWORK_LINE_HPP
 #define DNCOURSEWORK_LINE_HPP

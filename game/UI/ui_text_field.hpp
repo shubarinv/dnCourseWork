@@ -1,6 +1,4 @@
-//
-// Created by vhundef on 09.01.2020.
-//
+
 
 #ifndef DNCOURSEWORK_UI_TEXT_FIELD_HPP
 #define DNCOURSEWORK_UI_TEXT_FIELD_HPP

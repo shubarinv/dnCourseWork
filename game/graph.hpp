@@ -1,6 +1,4 @@
-//
-// Created by vhundef on 06.01.2020.
-//
+
 
 #ifndef DNCOURSEWORK_GRAPH_HPP
 #define DNCOURSEWORK_GRAPH_HPP

@@ -1,6 +1,3 @@
-//
-// Created by vhundef on 02.01.2020.
-//
 
 #ifndef PROGONHLANG_INPUT_MANAGER_HPP
 #define PROGONHLANG_INPUT_MANAGER_HPP

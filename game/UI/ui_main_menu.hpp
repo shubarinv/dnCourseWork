@@ -1,6 +1,4 @@
-//
-// Created by vhundef on 27.12.2019.
-//
+
 
 #ifndef PROGONHLANG_UI_MAIN_MENU_HPP
 #define PROGONHLANG_UI_MAIN_MENU_HPP

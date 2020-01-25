@@ -1,6 +1,4 @@
-//
-// Created by vhundef on 24.12.2019.
-//
+
 
 #ifndef PROGONHLANG_GAME_HPP
 #define PROGONHLANG_GAME_HPP
@@ -54,7 +52,8 @@ public:
         graphBuilder = new GraphBuilder(graph);
         uiFunctions = new ui_Functions(functionsUI_Manger, winManager->getFunctionsWindow(), "ru");
         SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "SDL2 init - Good\nGame Start");
-        run(); // Starts the game
+	    showRules();
+	    run(); // Starts the game
     }
 
 private:
@@ -89,16 +88,23 @@ private:
                 SDL_Delay(frameDelay - frameTime);
             }
         }
-        delete inputManager;
-        free(graphUI_Manger);
-        free(functionsUI_Manger);
-        SDL_DestroyRenderer(winManager->getGraphWinRender());
-        SDL_DestroyRenderer(winManager->getFunctionsWinRender());
-        SDL_DestroyWindow(winManager->getGraphWindow());
-        SDL_DestroyWindow(winManager->getFunctionsWindow());
+	    delete inputManager;
+	    free(graphUI_Manger);
+	    free(functionsUI_Manger);
+	    SDL_DestroyRenderer(winManager->getGraphWinRender());
+	    SDL_DestroyRenderer(winManager->getFunctionsWinRender());
+	    SDL_DestroyWindow(winManager->getGraphWindow());
+	    SDL_DestroyWindow(winManager->getFunctionsWindow());
 
-        return 0;
+	    return 0;
     }
+
+	void showRules() {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+		                         "Rules",
+		                         "Enter numerics and char 'x', if smth is drawn on the screen then expr is correct.\n\nMade by Markus\n",
+		                         NULL);
+	}
 };
 
 
